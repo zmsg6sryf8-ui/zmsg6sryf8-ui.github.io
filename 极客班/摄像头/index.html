@@ -20,7 +20,7 @@
     
     
       
-        <title>1开启摄像头显示 - 达志编程</title>
+        <title>摄像头显示 - 达志编程</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#1" class="md-skip">
+        <a href="#_1" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              1开启摄像头显示
+              摄像头显示
             
           </span>
         </div>
@@ -1057,7 +1057,7 @@
   
   
   <span class="md-ellipsis">
-    1开启摄像头显示
+    摄像头显示
     
   </span>
   
@@ -1202,117 +1202,141 @@
 
 
 
-<h1 id="1">1开启摄像头显示</h1>
-<p>import cv2  # 导入OpenCV计算机视觉库</p>
-<p>示例：读取并显示图片文件
- img = cv2.imread(r"D:\www.jpg")  # 从指定路径读取图片文件，返回图像矩阵</p>
-<h1 id="cv2imshowwwwjpg-img-wwwjpg">cv2.imshow("www.jpg", img)  # 创建名为"www.jpg"的窗口并显示图片</h1>
-<h1 id="cv2waitkey0-0">cv2.waitKey(0)  # 等待键盘输入，参数0表示无限等待，其他数字表示等待毫秒数</h1>
-<p>gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 将彩色图像转换为灰度图像
- edges = cv2.Canny(gray, 25, 100)  # 使用Canny算法进行边缘检测，参数为低阈值和高阈值</p>
-<p>初始化摄像头设备
-Camera = cv2.VideoCapture(0)  # 创建VideoCapture对象，参数0表示默认摄像头</p>
-<p>while True:</p>
-<pre><code># 从摄像头读取一帧图像
-ret, frame = Camera.read()  # ret返回读取成功与否的布尔值，frame返回捕获的图像帧
+<h1 id="_1">摄像头显示</h1>
+<p>导入OpenCV计算机视觉库</p>
+<pre><code>import cv2  
 </code></pre>
-<p>灰度化处理：将彩色图像转换为灰度图像
-    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 将BGR彩色图像转换为灰度图像</p>
-<p>边缘化处理：使用Canny算法进行边缘检测
-    edges_frame = cv2.Canny(gray_frame, 0, 150)  # 参数：灰度图像，低阈值50，高阈值150</p>
-<pre><code># 显示原始图像
-cv2.imshow("Original Camera", frame)  # 显示原始的彩色图像
-
-# 显示灰度化处理后的图像
-#cv2.imshow("Grayscale", gray_frame)  # 显示灰度图像
-
-# 显示边缘检测处理后的图像
-cv2.imshow("Edge Detection", edges_frame)  # 显示边缘检测结果
-
-# 等待键盘输入1000毫秒（1秒）
-cv2.waitKey(1)  # 等待1秒后继续执行，期间可接收键盘输入
-#展示一张图片的时间
+<p>示例：读取并显示图片文件</p>
+<p><code>img = cv2.imread(r"D:\www.jpg")</code></p>
+<p>从指定路径读取图片文件，返回图像矩阵</p>
+<pre><code>cv2.imshow(&quot;www.jpg&quot;, img) 
 </code></pre>
-<p>Camera.release()  # 释放摄像头资源
- cv2.destroyAllWindows()  # 关闭所有OpenCV创建的窗口</p>
-<h1 id="2">2人脸识别</h1>
-<p>import cv2</p>
-<p>打开默认摄像头（通常为电脑内置摄像头）
-Camera = cv2.VideoCapture(0)</p>
-<h1 id="opencvhaar">加载OpenCV自带的人脸检测级联分类器（Haar特征分类器）</h1>
-<p>face = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")</p>
-<h1 id="_1">创建主循环，持续处理视频流</h1>
-<p>while True:
-    # 从摄像头读取一帧图像，ret表示读取是否成功，frame是图像数据
-    ret, frame = Camera.read()</p>
-<pre><code># 使用人脸检测器检测当前帧中的人脸，返回人脸位置的矩形坐标列表
-FD = face.detectMultiScale(frame)
-
-# 遍历检测到的每个人脸位置
-for (x, y, w, h) in FD:
-    # 在检测到的人脸周围绘制绿色矩形框，线宽为2像素
-    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-# 显示带有人脸框的视频帧
-cv2.imshow("frame", frame)
-
-# 等待1毫秒并检查是否按下'q'键，如果是则退出循环
-if cv2.waitKey(1) &amp; 0xFF == ord('q'):
-    break
+<p>创建名为"www.jpg"的窗口并显示图片</p>
+<pre><code>cv2.waitKey(0)  
 </code></pre>
-<h1 id="_2">释放摄像头资源</h1>
-<p>Camera.release()</p>
-<h1 id="opencv">关闭所有OpenCV创建的窗口</h1>
-<p>cv2.destroyAllWindows()</p>
+<p>等待键盘输入，参数0表示无限等待，其他数字表示等待毫秒数</p>
+<pre><code>gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+</code></pre>
+<p>将彩色图像转换为灰度图像</p>
+<pre><code>edges = cv2.Canny(gray, 25, 100)  
+</code></pre>
+<p>使用Canny算法进行边缘检测，参数为低阈值和高阈值</p>
+<p>初始化摄像头设备</p>
+<p>创建VideoCapture对象，参数0表示默认摄像头</p>
+<pre><code>Camera = cv2.VideoCapture(0)
+</code></pre>
+<pre><code>while True：
+   从摄像头读取一帧图像
+   ret, frame = Camera.read()  # ret返回读取成功与否的布尔值，frame返回捕获的图像帧
+  灰度化处理：将彩色图像转换为灰度图像
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 将BGR彩色图像转换为灰度图像
+ 边缘化处理：使用Canny算法进行边缘检测
+    edges_frame = cv2.Canny(gray_frame, 0, 150) # 参数：灰度图像，低阈值50，高阈值150
+    # 显示原始图像
+   cv2.imshow(&quot;Original Camera&quot;, frame) # 显示原始的彩色图像
+    # 显示灰度化处理后的图像
+   cv2.imshow(&quot;Grayscale&quot;, gray_frame)  # 显示灰度图像
+    # 显示边缘检测处理后的图像
+   cv2.imshow(&quot;Edge Detection&quot;, edges_frame) # 显示边缘检测结果
+    # 等待键盘输入1000毫秒（1秒）
+   cv2.waitKey(1)  # 等待1秒后继续执行，期间可接收键盘输入
+
+</code></pre>
+<p>释放摄像头资源</p>
+<p><code>Camera.release()</code></p>
+<p>关闭所有OpenCV创建的窗口</p>
+<pre><code>cv2.destroyAllWindows()
+</code></pre>
+<h1 id="_2">人脸识别</h1>
+<pre><code>import cv2
+</code></pre>
+<p>打开默认摄像头（通常为电脑内置摄像头）</p>
+<pre><code>Camera = cv2.VideoCapture(0)
+</code></pre>
+<p>加载OpenCV自带的人脸检测级联分类器（Haar特征分类器）</p>
+<pre><code>face = cv2.CascadeClassifier(cv2.data.haarcascades + &quot;haarcascade_frontalface_default.xml&quot;)
+</code></pre>
+<p>创建主循环，持续处理视频流</p>
+<pre><code>while True:
+从摄像头读取一帧图像，ret表示读取是否成功，frame是图像数据
+    ret, frame = Camera.read()
+
+    # 使用人脸检测器检测当前帧中的人脸，返回人脸位置的矩形坐标列表
+    FD = face.detectMultiScale(frame)
+
+    # 遍历检测到的每个人脸位置
+    for (x, y, w, h) in FD:
+        # 在检测到的人脸周围绘制绿色矩形框，线宽为2像素
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+    # 显示带有人脸框的视频帧
+    cv2.imshow(&quot;frame&quot;, frame)
+
+    # 等待1毫秒并检查是否按下'q'键，如果是则退出循环
+    if cv2.waitKey(1) &amp; 0xFF == ord('q'):
+        break
+</code></pre>
+<p>释放摄像头资源</p>
+<pre><code>Camera.release()
+</code></pre>
+<p>关闭所有OpenCV创建的窗口</p>
+<pre><code>cv2.destroyAllWindows()
+</code></pre>
 <h1 id="3">3识别图像</h1>
-<p>import cv2</p>
-<h1 id="_3">打开默认摄像头</h1>
-<p>Camera = cv2.VideoCapture(0)</p>
-<h1 id="_4">主循环，持续处理视频流</h1>
-<p>while True:
-    # 从摄像头读取一帧图像，ret表示读取是否成功，frame是图像数据
-    ret, frame = Camera.read()</p>
-<pre><code># 将彩色图像转换为灰度图像，便于边缘检测处理
-gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-# 使用Canny算法检测图像中的边缘，50和150分别是低阈值和高阈值
-edges = cv2.Canny(gray, 50, 150)
-
-# 在边缘图像中查找轮廓，RETR_EXTERNAL表示只检测最外层轮廓
-# CHAIN_APPROX_SIMPLE表示压缩水平、垂直和对角线段，只保留它们的端点
-contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-# 遍历所有检测到的轮廓
-for i in contours:
-    # 使用多边形近似轮廓，epsilon参数控制近似精度（原始轮廓周长的一定比例）
-    # 第二个True表示轮廓是闭合的
-    epsilon = 0.02 * cv2.arcLength(i, True)
-    # 使用Douglas-Peucker算法对轮廓进行多边形近似
-    approx = cv2.approxPolyDP(i, epsilon, True)
-
-    # 获取近似多边形的外接矩形坐标和尺寸
-    x, y, w, h = cv2.boundingRect(approx)
-
-    # 判断轮廓的顶点数量来确定形状类型
-    if len(approx) == 3:
-        # 如果是三角形，绘制红色三角形框（使用多边形绘制而不是矩形）
-        cv2.polylines(frame, [approx], True, (0, 0, 255), 2)
-        print("三角形")  # 在控制台输出形状名称
-    elif len(approx) == 4:
-        # 如果是矩形，绘制红色矩形框
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
-        print("矩形")  # 在控制台输出形状名称
-
-# 显示处理后的图像帧
-cv2.imshow("frame", frame)
-
-# 等待1毫秒，如果按下'q'键则退出循环
-if cv2.waitKey(1) &amp; 0xFF == ord('q'):
-    break
+<pre><code>import cv2
 </code></pre>
-<h1 id="_5">释放摄像头资源</h1>
-<p>Camera.release()</p>
-<h1 id="opencv_1">关闭所有OpenCV创建的窗口</h1>
-<p>cv2.destroyAllWindows()</p>
+<p>打开默认摄像头</p>
+<pre><code>Camera = cv2.VideoCapture(0)
+</code></pre>
+<p>主循环，持续处理视频流</p>
+<pre><code>while True:
+
+    # 从摄像头读取一帧图像，ret表示读取是否成功，frame是图像数据
+
+   ret, frame = Camera.read()
+
+    # 将彩色图像转换为灰度图像，便于边缘检测处理
+   gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # 使用Canny算法检测图像中的边缘，50和150分别是低阈值和高阈值
+   edges = cv2.Canny(gray, 50, 150)
+
+    # 在边缘图像中查找轮廓，RETR_EXTERNAL表示只检测最外层轮廓
+    # CHAIN_APPROX_SIMPLE表示压缩水平、垂直和对角线段，只保留它们的端点
+    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # 遍历所有检测到的轮廓
+    for i in contours:
+
+        # 使用多边形近似轮廓，epsilon参数控制近似精度（原始轮廓周长的一定比例）
+        # 第二个True表示轮廓是闭合的
+        epsilon = 0.02 * cv2.arcLength(i, True)
+        # 使用Douglas-Peucker算法对轮廓进行多边形近似
+        approx = cv2.approxPolyDP(i, epsilon, True)
+        # 获取近似多边形的外接矩形坐标和尺寸
+        x, y, w, h = cv2.boundingRect(approx)
+        # 判断轮廓的顶点数量来确定形状类型
+        if len(approx) == 3:
+            # 如果是三角形，绘制红色三角形框（使用多边形绘制而不是矩形）
+            cv2.polylines(frame, [approx], True, (0, 0, 255), 2)
+            print(&quot;三角形&quot;)  # 在控制台输出形状名称
+        elif len(approx) == 4:
+            # 如果是矩形，绘制红色矩形框
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            print(&quot;矩形&quot;)  # 在控制台输出形状名称
+    # 显示处理后的图像帧
+    cv2.imshow(&quot;frame&quot;, frame)
+
+    # 等待1毫秒，如果按下'q'键则退出循环
+    if cv2.waitKey(1) &amp; 0xFF == ord('q'):
+       break
+</code></pre>
+<p>释放摄像头资源</p>
+<pre><code>Camera.release()
+</code></pre>
+<p>关闭所有OpenCV创建的窗口</p>
+<pre><code>cv2.destroyAllWindows()
+</code></pre>
 
 
 

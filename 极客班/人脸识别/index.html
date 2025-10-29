@@ -71,11 +71,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#_1" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -1026,8 +1021,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1058,7 +1051,7 @@
   
   
   <span class="md-ellipsis">
-    1开启摄像头显示
+    摄像头显示
     
   </span>
   
@@ -1185,8 +1178,6 @@
   
   
   
-    
-  
   
 </nav>
                   </div>
@@ -1202,34 +1193,42 @@
 
 
 
-<p>import cv2</p>
-<h1 id="_1">打开默认摄像头（通常为电脑内置摄像头）</h1>
-<p>Camera = cv2.VideoCapture(0)</p>
-<h1 id="opencvhaar">加载OpenCV自带的人脸检测级联分类器（Haar特征分类器）</h1>
-<p>face = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")</p>
-<h1 id="_2">创建主循环，持续处理视频流</h1>
-<p>while True:
-    # 从摄像头读取一帧图像，ret表示读取是否成功，frame是图像数据
-    ret, frame = Camera.read()</p>
-<pre><code># 使用人脸检测器检测当前帧中的人脸，返回人脸位置的矩形坐标列表
-FD = face.detectMultiScale(frame)
+  <h1>人脸识别</h1>
 
-# 遍历检测到的每个人脸位置
-for (x, y, w, h) in FD:
-    # 在检测到的人脸周围绘制绿色矩形框，线宽为2像素
-    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-# 显示带有人脸框的视频帧
-cv2.imshow("frame", frame)
-
-# 等待1毫秒并检查是否按下'q'键，如果是则退出循环
-if cv2.waitKey(1) &amp; 0xFF == ord('q'):
-    break
+<pre><code>import cv2
 </code></pre>
-<h1 id="_3">释放摄像头资源</h1>
-<p>Camera.release()</p>
-<h1 id="opencv">关闭所有OpenCV创建的窗口</h1>
-<p>cv2.destroyAllWindows()</p>
+<p>打开默认摄像头（通常为电脑内置摄像头）</p>
+<pre><code>Camera = cv2.VideoCapture(0)
+</code></pre>
+<p>加载OpenCV自带的人脸检测级联分类器（Haar特征分类器）</p>
+<pre><code>face = cv2.CascadeClassifier(cv2.data.haarcascades + &quot;haarcascade_frontalface_default.xml&quot;)
+</code></pre>
+<pre><code>创建主循环，持续处理视频流
+while True:
+    # 从摄像头读取一帧图像，ret表示读取是否成功，frame是图像数据
+    ret, frame = Camera.read()
+
+    # 使用人脸检测器检测当前帧中的人脸，返回人脸位置的矩形坐标列表
+    FD = face.detectMultiScale(frame)
+
+    # 遍历检测到的每个人脸位置
+    for (x, y, w, h) in FD:
+        # 在检测到的人脸周围绘制绿色矩形框，线宽为2像素
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+    # 显示带有人脸框的视频帧
+    cv2.imshow(&quot;frame&quot;, frame)
+
+    # 等待1毫秒并检查是否按下'q'键，如果是则退出循环
+    if cv2.waitKey(1) &amp; 0xFF == ord('q'):
+        break
+</code></pre>
+<p>释放摄像头资源</p>
+<pre><code>Camera.release()
+</code></pre>
+<p>关闭所有OpenCV创建的窗口</p>
+<pre><code>cv2.destroyAllWindows()
+</code></pre>
 
 
 

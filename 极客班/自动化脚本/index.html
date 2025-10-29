@@ -71,11 +71,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#pyautoguimovetowidth2high2duration-05" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -1048,7 +1043,7 @@
   
   
   <span class="md-ellipsis">
-    1开启摄像头显示
+    摄像头显示
     
   </span>
   
@@ -1118,8 +1113,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1185,8 +1178,6 @@
   
   
   
-    
-  
   
 </nav>
                   </div>
@@ -1202,25 +1193,39 @@
 
 
 
-<p>import pyautogui#调用pyautogui库
-width,high = pyautogui.size()#测量gui界面大小,宽高 并赋值给width，high</p>
-<h1 id="pyautoguimovetowidth2high2duration-05">pyautogui.moveTo(width/2,high/2,duration = 0.5)#将鼠标移动到指定位置，三个参数，</h1>
-<h1 id="_1">第一个是水平方向上移动，</h1>
-<h1 id="_2">第二个在垂直方向上移动，</h1>
-<h1 id="_3">第三个是移动的时间</h1>
-<h1 id="pyautoguitypewriteasdfainterval-01interval">pyautogui.typewrite("asdfa",interval = 0.1)#输入文本,interval输出间隔时间</h1>
-<h1 id="_4">模拟按键打字</h1>
-<h1 id="pyautoguipressa-up">pyautogui.press("A")#控制键盘按下设定的按键 如“up”</h1>
-<p>while True:
+  <h1>自动化脚本</h1>
+
+<p>调用pyautogui库</p>
+<p><code>import pyautogui</code></p>
+<p>测量gui界面大小,宽高 并赋值给width，high</p>
+<pre><code>width,high = pyautogui.size()
+</code></pre>
+<p>将鼠标移动到指定位置，三个参数，</p>
+<pre><code>pyautogui.moveTo(width/2,high/2,duration = 0.5)
+
+#第一个是水平方向上移动，
+#第二个在垂直方向上移动，
+#第三个是移动的时间
+</code></pre>
+<p>输入文本,interval输出间隔时间</p>
+<pre><code>pyautogui.typewrite(&quot;asdfa&quot;,interval = 0.1)
+</code></pre>
+<p>模拟按键打字</p>
+<p>控制键盘按下设定的按键 如“up”</p>
+<pre><code>pyautogui.press(&quot;A&quot;)
+</code></pre>
+<pre><code>while True:
     r,g,b = pyautogui.pixel(310,435)
     print(r,g,b)
     if r!=255 or g!= 255 or b!= 255:
-        pyautogui.press("up")
+        pyautogui.press(&quot;up&quot;)
         r1,g1,b1 = pyautogui.pixel(325,410)
     if r1!=255 or g1!= 255 or b1!= 255:
-        pyautogui.press("down")</p>
-<h1 id="_5">小恐龙程序脚本</h1>
-<h1 id="printwidthhigh">print(width,high)</h1>
+        pyautogui.press(&quot;down&quot;)
+</code></pre>
+<p>小恐龙程序脚本</p>
+<pre><code>print(width,high)
+</code></pre>
 
 
 
