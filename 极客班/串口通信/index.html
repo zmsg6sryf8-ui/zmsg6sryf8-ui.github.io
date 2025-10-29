@@ -71,11 +71,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#_1" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -1003,8 +998,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1185,8 +1178,6 @@
   
   
   
-    
-  
   
 </nav>
                   </div>
@@ -1202,37 +1193,51 @@
 
 
 
-<p>from machine import FPIOA,UART,PWM
+  <h1>串口通信</h1>
+
+<p>导入库</p>
+<pre><code>from machine import FPIOA,UART,PWM
 import time
 from media.sensor import *
 from media.display import *
-from media.media import *</p>
-<h1 id="_1">摄像头参数设置</h1>
-<p>sensor_id = 2  # 摄像头ID
-w, h = (320, 240)  # 图像宽度和高度</p>
-<h1 id="fpioa">FPIOA引脚映射初始化</h1>
-<p>fp = FPIOA()</p>
-<h1 id="_2">摄像头初始化</h1>
-<p>sensor = Sensor(id=sensor_id)  # 创建传感器对象
+from media.media import *
+</code></pre>
+<p>摄像头参数设置</p>
+<pre><code>sensor_id = 2  # 摄像头ID
+w, h = (320, 240)  # 图像宽度和高度
+</code></pre>
+<p>FPIOA引脚映射初始化</p>
+<pre><code>fp = FPIOA()
+</code></pre>
+<p>摄像头初始化</p>
+<pre><code>sensor = Sensor(id=sensor_id)  # 创建传感器对象
 sensor.reset()  # 重置传感器
 sensor.set_framesize(width=w, height=h)  # 设置图像尺寸
-sensor.set_pixformat(Sensor.RGB565)  # 设置像素格式为RGB565</p>
-<h1 id="_3">显示系统初始化</h1>
-<p>Display.init(Display.VIRT, width=w, height=h)  # 初始化虚拟显示
+sensor.set_pixformat(Sensor.RGB565)  # 设置像素格式为RGB565
+
+</code></pre>
+<p>显示系统初始化</p>
+<pre><code>Display.init(Display.VIRT, width=w, height=h)  # 初始化虚拟显示
 MediaManager.init()  # 初始化媒体管理器
-sensor.run()  # 启动摄像头</p>
-<h1 id="_4">硬件引脚功能配置</h1>
-<p>fp.set_function(3,FPIOA.UART1_TXD)  # GPIO3设置为UART1发送
+sensor.run()  # 启动摄像头
+</code></pre>
+<p>硬件引脚功能配置</p>
+<pre><code>fp.set_function(3,FPIOA.UART1_TXD)  # GPIO3设置为UART1发送
 fp.set_function(4,FPIOA.UART1_RXD)  # GPIO4设置为UART1接收
-fp.set_function(47,FPIOA.PWM3)      # GPIO47设置为PWM3输出</p>
-<h1 id="_5">外设初始化</h1>
-<p>uart1 = UART(UART.UART1,baudrate = 115200)  # 初始化UART1，波特率115200
+fp.set_function(47,FPIOA.PWM3)      # GPIO47设置为PWM3输出
+
+</code></pre>
+<p>外设初始化</p>
+<pre><code>uart1 = UART(UART.UART1,baudrate = 115200)  # 初始化UART1，波特率115200
 servo = PWM(3,50)    # 初始化PWM3，频率50Hz（舵机控制）
-servo.enable(1)      # 使能PWM输出</p>
-<p>def zd(jd):
-    """舵机控制函数
+servo.enable(1)      # 使能PWM输出
+
+</code></pre>
+<p>舵机转动函数</p>
+<pre><code>def zd(jd):
+    &quot;&quot;&quot;舵机控制函数
     参数: jd - 舵机角度(0-180度)
-    """
+    &quot;&quot;&quot;
     if jd &gt; 180:
         jd = 180  # 限制最大角度为180度
     elif jd &lt; 0:
@@ -1240,32 +1245,35 @@ servo.enable(1)      # 使能PWM输出</p>
     # 计算PWM占空比：2.5%对应0度，12.5%对应180度
     duty = 2.5 + 10 * jd //180
     servo.duty(duty)  # 设置PWM占空比
-    time.sleep(0.1)   # 等待舵机转动完成</p>
-<p>a = 0  # 显示控制标志：0-不显示，1-显示</p>
-<h1 id="_6">主循环</h1>
-<p>while True:
+    time.sleep(0.1)   # 等待舵机转动完成
+
+a = 0  # 显示控制标志：0-不显示，1-显示
+</code></pre>
+<p>主循环</p>
+<pre><code>while True:
     img = sensor.snapshot()  # 从摄像头捕获一帧图像
-    item = uart1.read()      # 从串口读取数据</p>
-<pre><code>if item:
-    print(item)  # 打印接收到的数据
+    item = uart1.read()      # 从串口读取数据
 
-    # 舵机控制（当前被注释）
-    # zd(int(item))
+    if item:
+        print(item)  # 打印接收到的数据
 
-    # 显示控制命令处理
-    if item == b'on':
-        a = 1  # 开启显示
-    elif item == b'off':
-        a = 0  # 关闭显示
+        # 舵机控制（当前被注释）
+        # zd(int(item))
 
-# 根据显示标志决定是否显示图像
-if a == 1:
-    Display.show_image(img)  # 在显示器上显示图像
+        # 显示控制命令处理
+        if item == b'on':
+            a = 1  # 开启显示
+        elif item == b'off':
+            a = 0  # 关闭显示
 
-# 通过串口发送数据
-uart1.write('123\r\n')  # 发送字符串"123"并换行
+    # 根据显示标志决定是否显示图像
+    if a == 1:
+        Display.show_image(img)  # 在显示器上显示图像
 
-time.sleep(0.5)  # 延时0.5秒
+    # 通过串口发送数据
+    uart1.write('123\r\n')  # 发送字符串&quot;123&quot;并换行
+
+    time.sleep(0.5)  # 延时0.5秒
 </code></pre>
 
 

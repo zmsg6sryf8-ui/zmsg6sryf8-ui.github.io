@@ -71,11 +71,6 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
-        
-        <a href="#fpioa42pwm047pwm3" class="md-skip">
-          Skip to content
-        </a>
-      
     </div>
     <div data-md-component="announce">
       
@@ -1072,8 +1067,6 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
-        
-      
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -1185,8 +1178,6 @@
   
   
   
-    
-  
   
 </nav>
                   </div>
@@ -1202,85 +1193,96 @@
 
 
 
-<p>from machine import FPIOA, PWM
+  <h1>物体追踪</h1>
+
+<pre><code>from machine import FPIOA, PWM
 import time
 from media.sensor import *
 from media.display import *
-from media.media import *</p>
-<h1 id="fpioa42pwm047pwm3">==== 初始化舵机 ====# 配置FPIOA引脚功能：将物理引脚42配置为PWM0输出,将物理引脚47配置为PWM3输出,</h1>
-<p>fpioa = FPIOA()
+from media.media import *
+</code></pre>
+<p>==== 初始化舵机 ====# 配置FPIOA引脚功能：将物理引脚42配置为PWM0输出,将物理引脚47配置为PWM3输出,</p>
+<pre><code>fpioa = FPIOA()
 fpioa.set_function(42, FPIOA.PWM0)  # X轴舵机控制引脚
-fpioa.set_function(47, FPIOA.PWM3)  # Y轴舵机控制引脚</p>
-<h1 id="pwm0x3y50hz">初始化PWM：通道0（X轴）和通道3（Y轴），频率50Hz（舵机标准频率）</h1>
-<p>pwm_x = PWM(0, 50)  # X轴舵机PWM对象
-pwm_y = PWM(3, 50)  # Y轴舵机PWM对象</p>
-<h1 id="pwm">使能PWM输出</h1>
-<p>pwm_x.enable(1)
+fpioa.set_function(47, FPIOA.PWM3)  # Y轴舵机控制引脚
+</code></pre>
+<p>初始化PWM：通道0（X轴）和通道3（Y轴），频率50Hz（舵机标准频率）</p>
+<pre><code>pwm_x = PWM(0, 50)  # X轴舵机PWM对象
+pwm_y = PWM(3, 50)  # Y轴舵机PWM对象
+</code></pre>
+<p>使能PWM输出</p>
+<pre><code>pwm_x.enable(1)
 pwm_y.enable(1)
-def set_angle(x, y):
-    """
+</code></pre>
+<pre><code>def set_angle(x, y):
+    &quot;&quot;&quot;
     控制舵机角度
     参数:
         x: X轴角度，范围0~180度
         y: Y轴角度，范围0~180度
-    """
+    &quot;&quot;&quot;
     # 将角度转换为占空比：0°对应2.5%，180°对应12.5%
     duty_x = 2.5 + 10 * x / 180  # X轴占空比计算
-    duty_y = 2.5 + 10 * y / 180  # Y轴占空比计算</p>
-<pre><code># 设置PWM占空比
-pwm_x.duty(duty_x)
-pwm_y.duty(duty_y)
+    duty_y = 2.5 + 10 * y / 180  # Y轴占空比计算
+    设置PWM占空比
+    pwm_x.duty(duty_x)
+    pwm_y.duty(duty_y)
 </code></pre>
-<h1 id="_1">==== 初始化摄像头 ====# 创建传感器对象（摄像头）</h1>
-<p>sensor = Sensor(id=2)
+<p>==== 初始化摄像头 ====# 创建传感器对象（摄像头）</p>
+<pre><code>sensor = Sensor(id=2)
 sensor.reset()  # 重置摄像头
 sensor.set_framesize(width=320, height=240)  # 设置图像分辨率
-sensor.set_pixformat(Sensor.RGB565)  # 设置像素格式为RGB565</p>
-<h1 id="_2">初始化显示系统</h1>
-<p>Display.init(Display.VIRT, width=320, height=240)  # 虚拟显示，分辨率320x240
+sensor.set_pixformat(Sensor.RGB565)  # 设置像素格式为RGB565
+</code></pre>
+<p>初始化显示系统</p>
+<pre><code>Display.init(Display.VIRT, width=320, height=240)  # 虚拟显示，分辨率320x240
 MediaManager.init()  # 初始化媒体管理器
-sensor.run()  # 启动摄像头</p>
-<h1 id="lab-l_min-l_max-a_min-a_max-b_min-b_max">==== 颜色阈值 ====# LAB颜色空间阈值范围，用于检测黑色物体# 格式: [(L_min, L_max, A_min, A_max, B_min, B_max)]</h1>
-<p>BLACK = [(0, 45, 21, 127, -128, 127)]  # 黑色物体的LAB颜色阈值</p>
-<h1 id="_3">==== 主循环：色块追踪 ====</h1>
-<p>while True:
+sensor.run()  # 启动摄像头
+</code></pre>
+<p>==== 颜色阈值 ====# LAB颜色空间阈值范围，用于检测黑色物体# 格式: [(L_min, L_max, A_min, A_max, B_min, B_max)]</p>
+<pre><code>BLACK = [(0, 45, 21, 127, -128, 127)]  # 黑色物体的LAB颜色阈值
+</code></pre>
+<p>==== 主循环：色块追踪 ====</p>
+<pre><code>while True:
     # 从摄像头捕获一帧图像
-    img = sensor.snapshot()</p>
-<pre><code># 在图像中查找符合颜色阈值的色块
-# area_threshold=1000: 只检测面积大于1000像素的色块
-blobs = img.find_blobs(BLACK, area_threshold=1000)
+    img = sensor.snapshot()
 
-# 控制舵机追踪色块
-if blobs:
-    # 获取第一个检测到的色块的中心坐标
-    center_x = blobs[0][5]  # 第6个元素是色块中心X坐标（0-319）
-    center_y = blobs[0][6]  # 第7个元素是色块中心Y坐标（0-239）
+    在图像中查找符合颜色阈值的色块
+    area_threshold=1000: 只检测面积大于1000像素的色块
+    blobs = img.find_blobs(BLACK, area_threshold=1000)
 
-    # 将图像坐标转换为舵机角度
-    # X坐标(0-319)映射到角度(0-180)
-    x_angle = int(center_x / 320 * 180)
-    # Y坐标(0-239)映射到角度(0-180)  
-    y_angle = int(center_y / 240 * 180)
+    控制舵机追踪色块
+    if blobs:
+        获取第一个检测到的色块的中心坐标
+        center_x = blobs[0][5]  # 第6个元素是色块中心X坐标（0-319）
+        center_y = blobs[0][6]  # 第7个元素是色块中心Y坐标（0-239）
 
-    # 设置舵机角度，使摄像头对准色块中心
-    set_angle(x_angle, y_angle)
-time.sleep(0.05)
-    # 可选：在图像上绘制调试信息
-    # 绘制色块边界框
-    img.draw_rectangle(blobs[0][0:4], color=(255, 0, 0), thickness=2)
-    # 在色块中心绘制十字标记
-    img.draw_cross(center_x, center_y, color=(0, 255, 0), size=5)
-    # 显示当前舵机角度
-    img.draw_string(10, 10, f"X:{x_angle}° Y:{y_angle}°", color=(255, 255, 255))
+        将图像坐标转换为舵机角度
+        X坐标(0-319)映射到角度(0-180)
+        x_angle = int(center_x / 320 * 180)
+        Y坐标(0-239)映射到角度(0-180)  
+        y_angle = int(center_y / 240 * 180)
 
-    # 短暂延时，让舵机有足够时间移动到指定位置
+        设置舵机角度，使摄像头对准色块中心
+        set_angle(x_angle, y_angle)
     time.sleep(0.05)
+        可选：在图像上绘制调试信息
+        绘制色块边界框
+        img.draw_rectangle(blobs[0][0:4], color=(255, 0, 0), thickness=2)
+        在色块中心绘制十字标记
+        img.draw_cross(center_x, center_y, color=(0, 255, 0), size=5)
+        显示当前舵机角度
+        img.draw_string(10, 10, f&quot;X:{x_angle}° Y:{y_angle}°&quot;, color=(255, 255, 255))
 
-# 显示处理后的图像（带追踪标记）
-Display.show_image(img)
+        短暂延时，让舵机有足够时间移动到指定位置
+        time.sleep(0.05)
 
-# 主循环延时，控制处理频率
-time.sleep(0.05)
+        显示处理后的图像（带追踪标记）
+        Display.show_image(img)
+
+        主循环延时，控制处理频率
+        time.sleep(0.05)
+
 </code></pre>
 
 

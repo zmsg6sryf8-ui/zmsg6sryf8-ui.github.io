@@ -1193,64 +1193,64 @@
 
   <h1>颜色识别</h1>
 
-<p>'''</p>
-<pre><code class="language-python"># 导入所需要的库
-from media.sensor import *      # 导入摄像头传感器库
+<p>导入所需要的库</p>
+<pre><code>from media.sensor import *      # 导入摄像头传感器库
 from media.display import *     # 导入显示库
 from media.media import *       # 导入媒体管理库
 from machine import FPIOA, GPIO # 导入硬件控制库（引脚复用和GPIO）
 import time                     # 导入时间库
-
-# 初始化颜色阈值，摄像头通道和分辨率
-sensor_id = 2                   # 设置摄像头通道号为2
+</code></pre>
+<p>初始化颜色阈值，摄像头通道和分辨率</p>
+<pre><code>sensor_id = 2                   # 设置摄像头通道号为2
 w, h = (320, 240)              # 设置分辨率宽度320像素，高度240像素
 blue = [(34, 59, -48, -15, 9, 127)]    # 定义蓝色Lab颜色空间阈值范围
 yellow = [(19, 61, -10, -128, 127, -3)] # 定义黄色Lab颜色空间阈值范围
-
-#=====sensor摄像头初始化======#
-sensor = Sensor(id=sensor_id)   # 创建摄像头传感器对象
+</code></pre>
+<p>=====sensor摄像头初始化======</p>
+<pre><code>sensor = Sensor(id=sensor_id)   # 创建摄像头传感器对象
 sensor.reset()                  # 重置摄像头
 sensor.set_framesize(width=w, height=h) # 设置摄像头分辨率
 sensor.set_pixformat(Sensor.RGB565)     # 设置像素格式为RGB565
-
-#====显示初始化=====#
-Display.init(Display.VIRT, width=w, height=h) # 初始化虚拟显示，设置显示尺寸
-
-#====媒体管理初始化====#
-MediaManager.init()             # 初始化媒体管理器
+</code></pre>
+<p>====显示初始化=====</p>
+<pre><code>Display.init(Display.VIRT, width=w, height=h) # 初始化虚拟显示，设置显示尺寸
+</code></pre>
+<p>====媒体管理初始化====</p>
+<pre><code>MediaManager.init()             # 初始化媒体管理器
 sensor.run()                    # 启动摄像头运行
-
-#====RGB灯初始化====#
-# RGB灯引脚定义
+</code></pre>
+<p>====RGB灯初始化====</p>
+<pre><code>RGB灯引脚定义
 red_pin = 45    # 红色LED连接的物理引脚号
 green_pin = 46  # 绿色LED连接的物理引脚号  
 blue_pin = 47   # 蓝色LED连接的物理引脚号
-
-# 配置GPIO引脚功能映射
-fp = FPIOA()                    # 创建FPIOA（现场可编程IO阵列）对象
+</code></pre>
+<p>配置GPIO引脚功能映射</p>
+<pre><code>fp = FPIOA()                    # 创建FPIOA（现场可编程IO阵列）对象
 fp.set_function(red_pin, FPIOA.GPIO1)   # 将45号引脚映射为GPIO1功能（红色LED）
 fp.set_function(green_pin, FPIOA.GPIO2) # 将46号引脚映射为GPIO2功能（绿色LED）
 fp.set_function(blue_pin, FPIOA.GPIO3)  # 将47号引脚映射为GPIO3功能（蓝色LED）
-
-# 创建GPIO对象
-red_led = GPIO(GPIO.GPIO1, GPIO.OUT)    # 创建红色LED的GPIO对象，设置为输出模式
+</code></pre>
+<p>创建GPIO对象</p>
+<pre><code>red_led = GPIO(GPIO.GPIO1, GPIO.OUT)    # 创建红色LED的GPIO对象，设置为输出模式
 green_led = GPIO(GPIO.GPIO2, GPIO.OUT)  # 创建绿色LED的GPIO对象，设置为输出模式
 blue_led = GPIO(GPIO.GPIO3, GPIO.OUT)   # 创建蓝色LED的GPIO对象，设置为输出模式
-
-# 初始状态关闭所有灯
-red_led.off()                   # 关闭红色LED
+</code></pre>
+<p>初始状态关闭所有灯</p>
+<pre><code>red_led.off()                   # 关闭红色LED
 green_led.off()                 # 关闭绿色LED
 blue_led.off()                  # 关闭蓝色LED
 
-# 主循环
-while True:
+</code></pre>
+<p>主循环</p>
+<pre><code>while True:
     img = sensor.snapshot()     # 从摄像头获取一帧图像
 
-    # 监测色块
+    监测色块
     b = img.find_blobs(blue, area_threshold=9000)    # 在图像中查找蓝色色块，面积阈值9000
     y = img.find_blobs(yellow, area_threshold=9000)  # 在图像中查找黄色色块，面积阈值9000
 
-    # 绘制检测到的色块边界框
+    绘制检测到的色块边界框
     for i in b:
         # 在蓝色色块周围绘制红色矩形框，线宽3像素
         img.draw_rectangle(i.rect(), color=(255, 0, 0), thickness=3)
@@ -1259,7 +1259,7 @@ while True:
         # 在黄色色块周围绘制黄色矩形框，线宽3像素
         img.draw_rectangle(i.rect(), color=(255, 255, 0), thickness=3)
 
-    # 根据检测到的颜色直接控制RGB灯
+    根据检测到的颜色直接控制RGB灯
     if b:  # 如果检测到蓝色色块
         # 方式1：使用on()/off()方法（推荐）
         red_led.off()           # 关闭红色LED
@@ -1283,7 +1283,6 @@ while True:
 
     Display.show_image(img)     # 在显示窗口显示处理后的图像
 </code></pre>
-<p>'''</p>
 
 
 
