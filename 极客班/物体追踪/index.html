@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../%E7%89%A9%E4%BD%93%E8%BF%BD%E8%B8%AA/">
+        <link rel="prev" href="../%E6%91%84%E5%83%8F%E5%A4%B4/">
       
       
-        <link rel="next" href="../%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC/">
+        <link rel="next" href="../%E7%AC%AC%E4%B8%80%E5%91%A8/">
       
       
       <link rel="icon" href="../../assets/images/logo.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>第一周： - 达志编程</title>
+        <title>物体追踪 - 达志编程</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#fpioa42pwm047pwm3" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              第一周：
+              物体追踪
             
           </span>
         </div>
@@ -1063,29 +1063,6 @@
                 
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../%E7%89%A9%E4%BD%93%E8%BF%BD%E8%B8%AA/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    物体追踪
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
   
@@ -1103,13 +1080,36 @@
   
   
   <span class="md-ellipsis">
-    第一周：
+    物体追踪
     
   </span>
   
 
       </a>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../%E7%AC%AC%E4%B8%80%E5%91%A8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    第一周：
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1202,84 +1202,85 @@
 
 
 
-<h1 id="_1">第一周：</h1>
-<h1 id="python-randomturtlerequestspyautogui">python中  random随机库，turtle库，requests库，pyautogui库的使用</h1>
-<h2 id="random">random</h2>
-<p>A.（0，1）随机自然数的生成</p>
-<pre><code class="language-python">random.random(0,1)
+<p>from machine import FPIOA, PWM
+import time
+from media.sensor import *
+from media.display import *
+from media.media import *</p>
+<h1 id="fpioa42pwm047pwm3">==== 初始化舵机 ====# 配置FPIOA引脚功能：将物理引脚42配置为PWM0输出,将物理引脚47配置为PWM3输出,</h1>
+<p>fpioa = FPIOA()
+fpioa.set_function(42, FPIOA.PWM0)  # X轴舵机控制引脚
+fpioa.set_function(47, FPIOA.PWM3)  # Y轴舵机控制引脚</p>
+<h1 id="pwm0x3y50hz">初始化PWM：通道0（X轴）和通道3（Y轴），频率50Hz（舵机标准频率）</h1>
+<p>pwm_x = PWM(0, 50)  # X轴舵机PWM对象
+pwm_y = PWM(3, 50)  # Y轴舵机PWM对象</p>
+<h1 id="pwm">使能PWM输出</h1>
+<p>pwm_x.enable(1)
+pwm_y.enable(1)
+def set_angle(x, y):
+    """
+    控制舵机角度
+    参数:
+        x: X轴角度，范围0~180度
+        y: Y轴角度，范围0~180度
+    """
+    # 将角度转换为占空比：0°对应2.5%，180°对应12.5%
+    duty_x = 2.5 + 10 * x / 180  # X轴占空比计算
+    duty_y = 2.5 + 10 * y / 180  # Y轴占空比计算</p>
+<pre><code># 设置PWM占空比
+pwm_x.duty(duty_x)
+pwm_y.duty(duty_y)
 </code></pre>
-<p>B.(x,y)自然数的随机生成</p>
-<pre><code class="language-python">random.uniform(x,y)
-</code></pre>
-<p>C.(x.y)整数的随机生成</p>
-<pre><code class="language-python">random.randint(x,y)
-</code></pre>
-<p>D.(x,y,m)整数的随机生成,m为步长设置python</p>
-<pre><code class="language-python">random.rangrange(x,y,m)
-</code></pre>
-<h2 id="turtle">turtle</h2>
-<p>设置窗格、标题、背景颜色</p>
-<pre><code class="language-python">screen=turtle.Screen()、screen.title(“XXX”)、screen.bgcolor(“white”)
-</code></pre>
-<p>设置画笔、速度、宽度、颜色和填充颜色</p>
-<pre><code class="language-python">brush=turtle.Turtle()、brush.speed(3)、bruch.pensize(5)、brush.color(“black”,”green”)
-</code></pre>
-<p>开始填充</p>
-<pre><code class="language-python">brush.begin_fill()
-</code></pre>
-<p>图案绘制</p>
-<p>A. 三角形（旋转120度）</p>
-<pre><code class="language-python">for i in range(1,4):
+<h1 id="_1">==== 初始化摄像头 ====# 创建传感器对象（摄像头）</h1>
+<p>sensor = Sensor(id=2)
+sensor.reset()  # 重置摄像头
+sensor.set_framesize(width=320, height=240)  # 设置图像分辨率
+sensor.set_pixformat(Sensor.RGB565)  # 设置像素格式为RGB565</p>
+<h1 id="_2">初始化显示系统</h1>
+<p>Display.init(Display.VIRT, width=320, height=240)  # 虚拟显示，分辨率320x240
+MediaManager.init()  # 初始化媒体管理器
+sensor.run()  # 启动摄像头</p>
+<h1 id="lab-l_min-l_max-a_min-a_max-b_min-b_max">==== 颜色阈值 ====# LAB颜色空间阈值范围，用于检测黑色物体# 格式: [(L_min, L_max, A_min, A_max, B_min, B_max)]</h1>
+<p>BLACK = [(0, 45, 21, 127, -128, 127)]  # 黑色物体的LAB颜色阈值</p>
+<h1 id="_3">==== 主循环：色块追踪 ====</h1>
+<p>while True:
+    # 从摄像头捕获一帧图像
+    img = sensor.snapshot()</p>
+<pre><code># 在图像中查找符合颜色阈值的色块
+# area_threshold=1000: 只检测面积大于1000像素的色块
+blobs = img.find_blobs(BLACK, area_threshold=1000)
 
-    brush.forward(100)#移动的距离
+# 控制舵机追踪色块
+if blobs:
+    # 获取第一个检测到的色块的中心坐标
+    center_x = blobs[0][5]  # 第6个元素是色块中心X坐标（0-319）
+    center_y = blobs[0][6]  # 第7个元素是色块中心Y坐标（0-239）
 
-    brush.right(120)#右转120度
-</code></pre>
-<p>B. 五角星（旋转144度）</p>
-<pre><code class="language-python">for _ in range(5):
+    # 将图像坐标转换为舵机角度
+    # X坐标(0-319)映射到角度(0-180)
+    x_angle = int(center_x / 320 * 180)
+    # Y坐标(0-239)映射到角度(0-180)  
+    y_angle = int(center_y / 240 * 180)
 
-    t.forward(200)  
+    # 设置舵机角度，使摄像头对准色块中心
+    set_angle(x_angle, y_angle)
+time.sleep(0.05)
+    # 可选：在图像上绘制调试信息
+    # 绘制色块边界框
+    img.draw_rectangle(blobs[0][0:4], color=(255, 0, 0), thickness=2)
+    # 在色块中心绘制十字标记
+    img.draw_cross(center_x, center_y, color=(0, 255, 0), size=5)
+    # 显示当前舵机角度
+    img.draw_string(10, 10, f"X:{x_angle}° Y:{y_angle}°", color=(255, 255, 255))
 
-    t.right(144)
-</code></pre>
-<p>关闭填充</p>
-<pre><code class="language-python">brush.end_fill()
-</code></pre>
-<h2 id="requests">requests</h2>
-<p>爬取网站：https://picsum.photos/800/600</p>
-<p>发送请求：</p>
-<pre><code class="language-python">resp=requests.get(https://picsum.photos/800/600)
-</code></pre>
-<p>获取数据：</p>
-<pre><code class="language-python">img_byte=resp.content
-</code></pre>
-<p>将获取的数据打开或者创建一个文件：</p>
-<pre><code class="language-python">f=open(r”地址”,wb)
-</code></pre>
-<p>写入数据：</p>
-<pre><code class="language-python">f.write(img_byte)
-</code></pre>
-<p>关闭文件:</p>
-<pre><code class="language-python">f.close()
-</code></pre>
-<h2 id="pyautogui">pyautogui</h2>
-<p>获取屏幕宽高：</p>
-<pre><code class="language-python">w,h=pyautogui.size()
-</code></pre>
-<p>移动鼠标到中心位置：</p>
-<pre><code class="language-python">pyautogui.moveTo(w//2,h//2,duration=0.5)
-</code></pre>
-<p>在光标处输入：</p>
-<pre><code class="language-python">pyautogui.typewrite(“Hello”,interval=0.05)
-</code></pre>
-<p>按下回车：</p>
-<pre><code class="language-python">pyautogui.press(“enter”)
-</code></pre>
-<p>A. 控制小恐龙游戏脚本</p>
-<p>（核心：像素点坐标的颜色）：r,g,b=pyautogui.pixel(像素坐标)</p>
-<pre><code class="language-python">if r!=255 or g!=255 or b！=255：
+    # 短暂延时，让舵机有足够时间移动到指定位置
+    time.sleep(0.05)
 
-    pyautogui.press(“up”)
+# 显示处理后的图像（带追踪标记）
+Display.show_image(img)
+
+# 主循环延时，控制处理频率
+time.sleep(0.05)
 </code></pre>
 
 
